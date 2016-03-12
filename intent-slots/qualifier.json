@@ -1,39 +1,38 @@
 [
     {
-        qualifier: 'done',
-        status: true
+        "text": "done",
+        "status": true
     },
     {
-        qualifier: 'completed',
-        status: true
+        "text": "completed",
+        "status": true
     },
     {
-        qualifier: 'finished',
-        status: true
+        "text": "finished",
+        "status": true
     },
     {
-        qualifier: 'uncompleted',
-        status: false
+        "text": "uncompleted",
+        "status": false
     },
     {
-        qualifier: 'not-done',
-        status: false
+        "text": "not-done",
+        "status": false
     },
     {
-        qualifier: 'not-completed',
-        status: false
+        "text": "not-completed",
+        "status": false
     },
     {
-        qualifier: 'not done',
-        status: false
+        "text": "not done",
+        "status": false
     },
     {
-        qualifier: 'not completed',
-        status: false
+        "text": "not completed",
+        "status": false
     },
     {
-        qualifier: 'not finished',
-        status: false
-    },
-
+        "text": "not finished",
+        "status": false
+    }
 ]

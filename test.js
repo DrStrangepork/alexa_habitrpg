@@ -2,7 +2,7 @@
 * @Author: ziggy
 * @Date:   2016-03-10 05:56:05
 * @Last Modified by:   Matthew Zygowicz
-* @Last Modified time: 2016-03-10 19:22:51
+* @Last Modified time: 2016-03-12 11:00:03
 * This files objective is a sandbox for miscellanious testing.
 */
 
@@ -18,7 +18,8 @@ var http       = require('https')
 
 var api_route = "/api/v2";
 
-
+var qualifiers = require('./intent-slots/qualifier');
+console.log(qualifiers);
 
 var request_headers = {
   'Content-Type': 'application/json',
@@ -68,6 +69,6 @@ request_all_tasks(function(data){
 
     
     
-    var results = fuzzy.filter("airs", data, fuzzy_search_options);
+    var results = fuzzy.filter("fifty", data, fuzzy_search_options);
     console.log(results);
 });

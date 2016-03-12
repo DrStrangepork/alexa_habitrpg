@@ -18,6 +18,9 @@ grunt.initConfig({
    },
    lambda_package: {
       default: {
+         options: {
+            include_files: ['.env']
+         },
          package: 'HabitRPGAlexaSkill'
       }
    }

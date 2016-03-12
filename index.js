@@ -11,9 +11,12 @@ var http       = require('https')
   , HABIT_KEY  = process.env.HABIT_KEY
   , HABIT_USER = process.env.HABIT_USER
   , BASE_URL   = process.env.BASE_URL;
+var valid_qualifiers = require("./intent-slots/qualifier");
+var valid_types = require("./intent-slots/type");
 
+//define api route 
 var api_route = "/api/v2";
-var 
+
 
 // define request headers used for validation by HabitRPG
 var request_headers = {
@@ -21,7 +24,7 @@ var request_headers = {
   'x-api-key': HABIT_KEY
 }
 
-// Define fuzzy_search_options for HabitTasks
+// Define fuzzy_search_options for HabitTasks and intent-slots
 var fuzzy_search_options = {
   pre: '<'
   , post: '>'
@@ -82,92 +85,39 @@ var request_all_tasks = function(callback){
 * - Finally it batches up the responses before responding.
 */
 var handleGetAllTasksRequest = function(intent, session, response){
+  console.log("entered handleGetAllTasksRequest");
   request_all_tasks(function(data){
+    console.log("entered handleGetAllTasksRequest callBack function");
     var response_text = '';
     var number_found = 0;
     var intent_type = intent.slots.type.value.toLowerCase();
     var status = false;
     var check_status = false;
     var qualifier = '';
+    var fuzzy_type = 'all';
 
     if(typeof intent.slots.qualifier !== "undefined")
       check_status = true;
     
     if(check_status){
-      switch(intent.slots.qualifier.value){
-        case 'done':
-        case 'completed':
-          status = true;
-          break;
-        case 'not-done':
-        case 'not done':
-        case 'uncompleted':
-        case 'not completed':
-          status = false;
-          break;
-        default:
-          check_status = false;
+      var qual_results = fuzzy.filter(intent.slots.qualifier.value, valid_qualifiers, fuzzy_search_options);
+      if(qual_results.length > 0 && qual_results[0].score >= 12){
+        status = qual_results[0].original.status;
+        qualifier = qual_results[0].original.text;
+      } else{
+        check_status = false
       }
-      qualifier = intent.slots.qualifier.value;
     } 
-
-    switch(intent.slots.type.value.toLowerCase()){
-      case "habits":
-        data.map(function(obj){
-          if(obj.type=='habit') {
-
-              response_text += obj.text + '.\n '
-              number_found++;  
-            
-          }
-        });
-        break;
-      case "dailies":
-      case "dailys":
-      case "daily":
-        data.map(function(obj){
-          if(obj.type=='daily') {
-            if(check_status){
-              if(obj.completed === status){
-                response_text += obj.text + '. \n'
-                number_found++;    
-              }
-            }else{
-              response_text += obj.text + '.\n '
-              number_found++;  
-            }
-          }
-        });
-        break;
-      case "todos":
-      case "todoes":
-      case "to":
-      case "todo":
-      case "to do":
-      case "to dos":
-      case "to-dos":
-      case "to-do":
-        data.map(function(obj){
-          if(obj.type=='todo') {
-            if(check_status){
-              if(obj.completed === status){
-                response_text += obj.text + '.\n '
-                number_found++;    
-              }
-            }else{
-              response_text += obj.text + '.\n '
-              number_found++;  
-            }
-          }
-        });
-        break;
-      case "all":
-      default:
-        data.map(function(obj){
-          response_text += obj.text + '.\n '
-          number_found++;        
-        });
+    var type_results = fuzzy.filter(intent.slots.type.value.toLowerCase(), valid_types, fuzzy_search_options);
+    if(type_results.length > 0){
+      fuzzy_type = type_results[0].original.habit_type; 
     }
+    data.map(function(obj){
+      if(obj.type == fuzzy_type || fuzzy_type == 'all'){
+        response_text += obj.text + '.\n '
+        number_found++;  
+      }
+    });
 
     if(number_found === 0){
       response_text = "I'm sorry, I found no habits that meet the criteria";
@@ -186,7 +136,9 @@ var handleGetAllTasksRequest = function(intent, session, response){
 * - Then we report to the user
 */
 var handleMarkTask = function(intent, session, response){
+  console.log("entered handleMarkTask");
   request_all_tasks(function(data){
+    console.log("entered handleMarkTask callBack function");
     var response_text = '';
     var header = '';
     var direction = '';

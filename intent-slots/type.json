@@ -1,0 +1,50 @@
+[
+    {
+        "text": "habits",
+        "habit_type": "habit"
+    },
+    {
+        "text": "habit",
+        "habit_type": "habit"
+    },
+    {
+        "text": "dailies",
+        "habit_type": "daily"
+    },
+    {
+        "text": "daily",
+        "habit_type": "daily"
+    },
+    {
+        "text": "day",
+        "habit_type": "daily"
+    },
+    {
+        "text": "todo",
+        "habit_type": "todo"
+    },
+    {
+        "text": "todos",
+        "habit_type": "todo"
+    },
+    {
+        "text": "to do",
+        "habit_type": "todo"
+    },
+    {
+        "text": "to dos",
+        "habit_type": "todo"
+    },
+    {
+        "text": "to-do",
+        "habit_type": "todo"
+    },
+    {
+        "text": "to-dos",
+        "habit_type": "todo"
+    },
+    {
+        "text": "all",
+        "habit_type": "all"
+    }
+] 

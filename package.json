@@ -1,8 +1,12 @@
 {
   "name": "alexa-habit",
   "version": "1.0.0",
-  "description": "",
+  "description": "An unofficial HabitRPG/Habitica Alexa Skill",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/goldsziggy/alexa_habitrpg"
+  },
   "dependencies": {
     "dotenv": "^2.0.0",
     "fuzzy": "^0.1.1",
@@ -15,6 +19,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Matthew Zygowicz",
+  "license": "ISC",
+  "bundledDependencies": [
+    "dotenv",
+    "fuzzy"
+  ]
 }
