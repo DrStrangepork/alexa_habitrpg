@@ -96,7 +96,7 @@ var handleGetAllTasksRequest = function(intent, session, response){
     var qualifier = '';
     var fuzzy_type = 'all';
 
-    if(typeof intent.slots.qualifier !== "undefined")
+    if(typeof intent.slots.qualifier !== "undefined" && typeof intent.slots.qualifier.value !== "undefined")
       check_status = true;
     
     if(check_status){
