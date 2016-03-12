@@ -1,0 +1,39 @@
+[
+    {
+        qualifier: 'done',
+        status: true
+    },
+    {
+        qualifier: 'completed',
+        status: true
+    },
+    {
+        qualifier: 'finished',
+        status: true
+    },
+    {
+        qualifier: 'uncompleted',
+        status: false
+    },
+    {
+        qualifier: 'not-done',
+        status: false
+    },
+    {
+        qualifier: 'not-completed',
+        status: false
+    },
+    {
+        qualifier: 'not done',
+        status: false
+    },
+    {
+        qualifier: 'not completed',
+        status: false
+    },
+    {
+        qualifier: 'not finished',
+        status: false
+    },
+
+]

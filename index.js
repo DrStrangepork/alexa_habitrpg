@@ -13,20 +13,24 @@ var http       = require('https')
   , BASE_URL   = process.env.BASE_URL;
 
 var api_route = "/api/v2";
+var 
 
-
-
+// define request headers used for validation by HabitRPG
 var request_headers = {
   'x-api-user':  HABIT_USER,
   'x-api-key': HABIT_KEY
 }
 
+// Define fuzzy_search_options for HabitTasks
 var fuzzy_search_options = {
   pre: '<'
   , post: '>'
   , extract: function(el) { return el.text; }
 }
 
+/**
+* the following options define the api routes used by HabitRPG
+*/
 var options_get_all_tasks = {
   host: BASE_URL,
   path: api_route + '/user/tasks',
@@ -40,7 +44,15 @@ var options_update_task = {
   headers:request_headers,
   method: 'POST'
 };
+/**
+* END API ROUTE DEFINITIONS
+*/
 
+
+/**
+* This function is used to create the request to HabitRPG.
+* - It makes use of the options_get_all_tasks, gathers the returend JSON and passes it to the callback function.
+*/
 var request_all_tasks = function(callback){
   console.log("entered request_all_tasks");
     
@@ -62,7 +74,13 @@ var request_all_tasks = function(callback){
 
 
 
-
+/**
+* This function is the entrypoint for GetAllTasks Intent.
+* - It starts by calling request_all_tasks and passing it a callback function
+* - The callback function determains if there was a qualifier (did they want only compelted? not completed?)
+* - Next it determains if they wanted all, habits, todos, or dailies
+* - Finally it batches up the responses before responding.
+*/
 var handleGetAllTasksRequest = function(intent, session, response){
   request_all_tasks(function(data){
     var response_text = '';
@@ -91,21 +109,7 @@ var handleGetAllTasksRequest = function(intent, session, response){
           check_status = false;
       }
       qualifier = intent.slots.qualifier.value;
-    }
-
-    // data.map(function(obj){
-    //   if(obj.type == intent_type || intent_type == 'all' || intent_type ===''){
-        // if(check_status){
-        //   if(obj.completed === status){
-        //     response_text += obj.text + '. '
-        //     number_found++;    
-        //   }
-        // }else{
-        //   response_text += obj.text + '. '
-        //   number_found++;  
-        // }
-    //   }
-    // });
+    } 
 
     switch(intent.slots.type.value.toLowerCase()){
       case "habits":
@@ -173,6 +177,14 @@ var handleGetAllTasksRequest = function(intent, session, response){
   })
 }
 
+/**
+* This function is the entrypoint for MarkTask Intent.
+* - It starts by calling request_all_tasks and passing it a callback function
+* - The callback function determains the action the user wants to use
+* - From there we pass the task the user mentioned into the fuzzy search against all returned tasks
+* - Once fuzzy search was found complete, we perform a post request to the server to perform the action
+* - Then we report to the user
+*/
 var handleMarkTask = function(intent, session, response){
   request_all_tasks(function(data){
     var response_text = '';
@@ -238,19 +250,23 @@ var handleMarkTask = function(intent, session, response){
   });
 }
 
+//Boilerplate code....
 var HabitRPG = function(){
   AlexaSkill.call(this, APP_ID);
 };
 
+//Boilerplate code....
 HabitRPG.prototype = Object.create(AlexaSkill.prototype);
 HabitRPG.prototype.constructor = HabitRPG;
 
+//Boilerplate code....
 HabitRPG.prototype.eventHandlers.onSessionStarted = function(sessionStartedRequest, session){
   // What happens when the session starts? Optional
   console.log("onSessionStarted requestId: " + sessionStartedRequest.requestId
       + ", sessionId: " + session.sessionId);
 };
 
+//Boilerplate code....
 HabitRPG.prototype.eventHandlers.onLaunch = function(launchRequest, session, response){
   // This is when they launch the skill but don't specify what they want.
   var output = 'Welcome to Habit R P G. ' +
@@ -264,6 +280,8 @@ HabitRPG.prototype.eventHandlers.onLaunch = function(launchRequest, session, res
       + ", sessionId: " + session.sessionId);
 };
 
+//Boilerplate code....
+//This code section defines what to do when intents are found.
 HabitRPG.prototype.intentHandlers = {
   GetAllTasks: function(intent, session, response){
     handleGetAllTasksRequest(intent, session, response);
@@ -279,6 +297,7 @@ HabitRPG.prototype.intentHandlers = {
   }
 };
 
+//Boilerplate code....
 exports.handler = function(event, context) {
     var skill = new HabitRPG();
     skill.execute(event, context);
